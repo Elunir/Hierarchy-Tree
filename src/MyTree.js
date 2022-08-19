@@ -2,7 +2,10 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Tree, TreeNode } from "react-organizational-chart";
 import { DATASET } from "./treeData";
+
 const StyledNode = styled.button`
+  background-color: ${props => props.selected && "red"};
+  color: ${props => props.selected && "white"};
   padding: 5px;
   display: inline-block;
   border: 1px solid red;
@@ -14,6 +17,10 @@ const StyledNode = styled.button`
   }
 `;
 
+const Button = styled.button`
+ margin: 20px 0px 40px 0px;
+`;
+
 
 const MyTree = () => {
   const [selectedNode, setSelectedNode] = React.useState([]);
@@ -23,30 +30,46 @@ const MyTree = () => {
       e.target.style.color = "black";
       return;
     }
-    alert(selectedNode>0 ?  "You have selected " + selectedNode  : "You have selected " + document.activeElement.innerText);
     setSelectedNode([...selectedNode, document.activeElement.innerText]);
     e.target.style.backgroundColor = "red";
     e.target.style.color = "white";
   }
 
+ const alertMe = () => {
+  if(selectedNode.length > 0) {
+    alert("You have selected " + selectedNode);
+  }
+ }
+
   return (
-    <Tree
+<>
+<Button onClick={()=>{alertMe()}}>Alert Selected Nodes</Button>
+<Tree
       lineWidth={"3px"}
       lineColor={"green"}
-      label={<StyledNode onClick={(e) => { onNodeClick(e) }}>Main Node</StyledNode>}
+      label={<StyledNode onClick={(e) => {
+        onNodeClick(e)
+      }}>Main Node</StyledNode>}
     >
       {DATASET.children.map((node, index) => (
-        <TreeNode key={node.name} label={<StyledNode onClick={(e) => { onNodeClick(e) }}>{node.name}</StyledNode>}>
+        <TreeNode key={node.name} label={<StyledNode onClick={(e) => {
+          onNodeClick(e)
+        }}>{node.name}</StyledNode>}>
           {node.children.map((node, index) => (
-            <TreeNode key={node.name} label={<StyledNode onClick={(e) => { onNodeClick(e) }}>{node.name}</StyledNode>}>
+            <TreeNode key={node.name} label={<StyledNode onClick={(e) => {
+              onNodeClick(e)
+            }}>{node.name}</StyledNode>}>
               {node.children.map((node, index) => (
-                <TreeNode key={node.name} label={<StyledNode onClick={(e) => { onNodeClick(e) }}>{node.name}</StyledNode>} />
+                <TreeNode key={node.name} label={<StyledNode onClick={(e) => {
+                  onNodeClick(e)
+                }}>{node.name}</StyledNode>} />
               ))}
             </TreeNode>
           ))}
         </TreeNode>
       ))}
     </Tree>
+</>
   )
 };
 
